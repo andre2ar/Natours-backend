@@ -23,6 +23,8 @@ let port = process.env.PORT;
 if(process.env.NODE_ENV === 'development' || !process.env.PORT)
     port = 3000;
 
+process.on('SIGINT', () => { console.log("Bye bye!"); process.exit(); });
+
 app.listen(port, () => {
     console.log(`Running on port ${port}`);
 });
