@@ -7,7 +7,9 @@ const tourSchema = new mongoose.Schema({
         type: String,
         require: [true, requiredDataMessage+'name'],
         unique: true,
-        trim: true
+        trim: true,
+        maxlength: [40, requiredDataMessage+'less or equal 40 characteres'],
+        minlength: [10, requiredDataMessage+'more or equal 10 characteres']
     },
     slug: String,
     duration: {
@@ -20,11 +22,17 @@ const tourSchema = new mongoose.Schema({
     },
     difficulty: {
         type: String,
-        required: [true, requiredDataMessage+'difficulty']
+        required: [true, requiredDataMessage+'difficulty'],
+        enum: {
+            values: ['easy', 'medium', 'difficult'],
+            message: 'Difficulty is either: easy, medium, difficult'
+        }
     },
     ratingsAverage: {
         type: Number,
-        default: 4.5
+        default: 4.5,
+        min: [1, 'Rating must be above 1.0'],
+        max: [5, 'Rating must be below 5.0'],
     },
     ratingsQuantity: {
         type: Number,
