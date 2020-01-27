@@ -20,7 +20,8 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'Please provide a password'],
-        minlength: [8, 'Password must have at least 8 characters']
+        minlength: [8, 'Password must have at least 8 characters'],
+        select: false
     },
     passwordConfirm: {
         type: String,
@@ -38,11 +39,15 @@ const userSchema = new mongoose.Schema({
 userSchema.pre('save', async function (next) {
     if(this.isModified('password')) {
         this.password = await bcrypt.hash(this.password, 12);
-        this.passworConfirm = undefined;
+        this.passwordConfirm = undefined;
     }
 
     next();
 });
+
+userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
+    return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const User = mongoose.model('User', userSchema);
 
