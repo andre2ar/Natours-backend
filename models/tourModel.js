@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-const validator = require('validator');
 
 const requiredDataMessage = 'A tour must have a ';
 const tourSchema = new mongoose.Schema({
