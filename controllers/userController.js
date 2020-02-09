@@ -12,13 +12,14 @@ const filterObj = (obj, ...allowedFields) => {
 };
 
 exports.getAllUsers = catchAsync(async (req, res) => {
-    const tours = await features.query;
+    const users = await User.find();
 
+    // SEND RESPONSE
     res.status(200).json({
         status: 'success',
-        results: tours.length,
+        results: users.length,
         data: {
-            tours
+            users
         }
     });
 });
@@ -43,6 +44,17 @@ exports.updateMe = catchAsync(async (req, res, next) => {
         data: {
             user: updatedUser
         }
+    });
+});
+
+exports.deleteMe = catchAsync(async (req, res, next) => {
+    await User.findByIdAndUpdate(req.user.id, {
+        active: false
+    });
+
+    res.status(204).json({
+        status: 'success',
+        data: null
     });
 });
 
