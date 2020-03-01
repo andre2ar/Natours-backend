@@ -1,16 +1,19 @@
-const express = require('express');
-const morgan = require('morgan');
-const rateLimit = require('express-rate-limit');
-const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
-const hpp = require('hpp');
+import express from 'express';
+import morgan from 'morgan';
+import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
+import mongoSanitize from 'express-mongo-sanitize';
+import xss from 'xss-clean';
+import hpp from 'hpp';
+import path from 'path';
 
-const AppError = require('./utils/AppError');
-const globalErrorHandler = require('./controllers/errorController');
-const tourRouter = require('./routes/tourRoutes');
-const userRouter = require('./routes/userRoutes');
+import AppError from "./utils/AppError.js";
+import globalErrorHandler from "./controllers/errorController.js";
 
+import tourRouter from './routes/tourRoutes.js';
+import userRouter from './routes/userRoutes.js';
+
+const __dirname = path.resolve();
 const app = express();
 
 // GLOBAL Middlewares
@@ -71,4 +74,4 @@ app.all('*', (req, res, next) => {
 
 app.use(globalErrorHandler);
 
-module.exports =  app;
+export default app;

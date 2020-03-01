@@ -1,6 +1,6 @@
-const User = require('./../models/userModel');
-const catchAsync = require('./../utils/CatchAsync');
-const AppError = require('./../utils/AppError');
+import User from "../models/userModel.js";
+import catchAsync from './../utils/CatchAsync.js';
+import AppError from "../utils/AppError.js";
 
 const filterObj = (obj, ...allowedFields) => {
     const newObj = {};
@@ -11,7 +11,7 @@ const filterObj = (obj, ...allowedFields) => {
     return newObj;
 };
 
-exports.getAllUsers = catchAsync(async (req, res) => {
+export const getAllUsers = catchAsync(async (req, res) => {
     const users = await User.find();
 
     // SEND RESPONSE
@@ -24,7 +24,7 @@ exports.getAllUsers = catchAsync(async (req, res) => {
     });
 });
 
-exports.updateMe = catchAsync(async (req, res, next) => {
+export const updateMe = catchAsync(async (req, res, next) => {
     if(req.body.password || req.body.passwordConfirm) {
         return next(
             new AppError(
@@ -47,7 +47,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     });
 });
 
-exports.deleteMe = catchAsync(async (req, res, next) => {
+export const deleteMe = catchAsync(async (req, res, next) => {
     await User.findByIdAndUpdate(req.user.id, {
         active: false
     });
@@ -58,28 +58,28 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     });
 });
 
-exports.createUser = (req, res) => {
+export const createUser = (req, res) => {
     res.status(500).json({
         status: 'error',
         message: 'This route is not yet defined!'
     });
 };
 
-exports.getUser = (req, res) => {
+export const getUser = (req, res) => {
     res.status(500).json({
         status: 'error',
         message: 'This route is not yet defined!'
     });
 };
 
-exports.updateUser = (req, res) => {
+export const updateUser = (req, res) => {
     res.status(500).json({
         status: 'error',
         message: 'This route is not yet defined!'
     });
 };
 
-exports.deleteUser = (req, res) => {
+export const deleteUser = (req, res) => {
     res.status(500).json({
         status: 'error',
         message: 'This route is not yet defined!'
