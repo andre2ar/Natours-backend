@@ -1,8 +1,6 @@
 import mongoose from 'mongoose';
 import slugify from "slugify";
 
-import User from "./userModel.js";
-
 const requiredDataMessage = 'A tour must have a ';
 const tourSchema = new mongoose.Schema({
     name: {
@@ -103,7 +101,12 @@ const tourSchema = new mongoose.Schema({
             day: Number
         }
     ],
-    guides: Array
+    guides: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'User'
+        }
+    ]
 }, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
@@ -120,13 +123,14 @@ tourSchema.pre('save', function (next) {
     next();
 });
 
-tourSchema.pre('save', async function (next) {
+// Embed users NOT GONNA BE USED
+/*tourSchema.pre('save', async function (next) {
     const guidesPromisses = this.guides.map(async id => await User.findById(id));
 
     this.guides = await Promise.all(guidesPromisses);
 
     next();
-});
+});*/
 
 // Query middleware
 tourSchema.pre(/^find/, function (next) {
