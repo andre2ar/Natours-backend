@@ -12,6 +12,7 @@ import globalErrorHandler from "./controllers/errorController.js";
 
 import tourRouter from './routes/tourRoutes.js';
 import userRouter from './routes/userRoutes.js';
+import reviewRouter from './routes/reviewRoutes.js';
 
 const __dirname = path.resolve();
 const app = express();
@@ -67,6 +68,7 @@ app.use((req, res, next) => {
 // ROUTES
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/reviews', reviewRouter);
 
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server`), 404);
