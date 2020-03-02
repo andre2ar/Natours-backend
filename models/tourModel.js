@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import slugify from "slugify";
 
+import User from "./userModel.js";
+
 const requiredDataMessage = 'A tour must have a ';
 const tourSchema = new mongoose.Schema({
     name: {
@@ -76,7 +78,32 @@ const tourSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
         select: false
-    }
+    },
+    startLocation: {
+        //GeoJSON
+        type: {
+            type: String,
+            default: 'Point',
+            enum: ['Point']
+        },
+        coordinates: [Number],
+        address: String,
+        description: String
+    },
+    locations: [
+        {
+            type: {
+                type: String,
+                default: 'Point',
+                enum: ['Point']
+            },
+            coordinates: [Number],
+            address: String,
+            description: String,
+            day: Number
+        }
+    ],
+    guides: Array
 }, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
@@ -89,6 +116,14 @@ tourSchema.virtual('durationWeeks').get(function () {
 //Document middleware: runs berfore .save() and .create()
 tourSchema.pre('save', function (next) {
     this.slug = slugify(this.name, {lower: true});
+
+    next();
+});
+
+tourSchema.pre('save', async function (next) {
+    const guidesPromisses = this.guides.map(async id => await User.findById(id));
+
+    this.guides = await Promise.all(guidesPromisses);
 
     next();
 });

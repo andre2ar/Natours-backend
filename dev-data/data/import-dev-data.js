@@ -1,9 +1,12 @@
-const fs = require('fs');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const Tour = require('./../../models/tourModel');
+import fs from 'fs';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import path from "path";
+
+import Tour from "../../models/tourModel.js";
 
 dotenv.config({path: './config.env'});
+const __dirname = path.resolve();
 const DB = process.env.DATABASE.replace(
     '<PASSWORD>',
     process.env.DATABASE_PASSWORD);
@@ -17,7 +20,7 @@ mongoose.connect(DB, {
     console.log("DB connected...");
 });
 
-const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, 'utf-8'));
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours.json`, 'utf-8'));
 
 //IMPORT
 const importData = async () => {
