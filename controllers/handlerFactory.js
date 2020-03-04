@@ -1,5 +1,6 @@
 import catchAsync from "../utils/CatchAsync.js";
 import AppError from "../utils/AppError.js";
+import Tour from "../models/tourModel";
 
 export const deleteOne = Model => catchAsync(async (req, res) => {
     const doc = await Model.findByIdAndDelete(req.params.id);
@@ -37,6 +38,25 @@ export const createOne = Model => catchAsync(async (req, res) => {
 
     res.status(201).json({
         status: 'success',
+        data: {
+            data: doc
+        }
+    });
+});
+
+export const getOne = (Model, popOption) => catchAsync(async  (req, res, next) => {
+    let query = Model.findById(req.params.id);
+    if(popOption) query = query.populate(popOption);
+
+    const doc = await query;
+
+    if(!doc) {
+        return next(new AppError('No document found with that ID', 404));
+    }
+
+    res.status(200).json({
+        status: 'success',
+        results: 1,
         data: {
             data: doc
         }
