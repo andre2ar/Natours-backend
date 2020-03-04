@@ -4,6 +4,11 @@ import AppError from "../utils/AppError.js";
 
 import * as factory from './handlerFactory.js';
 
+export const getAllUsers = factory.getAll(User);
+export const getUser = factory.getOne(User);
+export const updateUser = factory.updateOne(User); // Do not update password
+export const deleteUser = factory.deleteOne(User);
+
 const filterObj = (obj, ...allowedFields) => {
     const newObj = {};
     Object.keys(obj).forEach(el => {
@@ -12,19 +17,6 @@ const filterObj = (obj, ...allowedFields) => {
 
     return newObj;
 };
-
-export const getAllUsers = catchAsync(async (req, res) => {
-    const users = await User.find();
-
-    // SEND RESPONSE
-    res.status(200).json({
-        status: 'success',
-        results: users.length,
-        data: {
-            users
-        }
-    });
-});
 
 export const updateMe = catchAsync(async (req, res, next) => {
     if(req.body.password || req.body.passwordConfirm) {
@@ -59,8 +51,3 @@ export const deleteMe = catchAsync(async (req, res, next) => {
         data: null
     });
 });
-
-export const getUser = factory.getOne(User);
-// Do not update password
-export const updateUser = factory.updateOne(User);
-export const deleteUser = factory.deleteOne(User);
