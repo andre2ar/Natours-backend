@@ -3,6 +3,8 @@ import Tour from "../models/tourModel.js";
 import catchAsync from "./../utils/CatchAsync.js";
 import AppError from "../utils/AppError.js";
 
+import * as factory from './handlerFactory.js';
+
 export const aliasTopTours = (req, res, next) => {
     req.query.limit = '5';
     req.query.sort = '-ratingsAverage,price';
@@ -74,20 +76,7 @@ export const updateTour = catchAsync(async (req, res) => {
     });
 });
 
-export const deleteTour = catchAsync(async (req, res) => {
-    const tour = await Tour.findByIdAndDelete(req.params.id);
-
-    if(!tour) {
-        return next(new AppError('No tour found with that ID', 404));
-    }
-
-    res.status(200).json({
-        status: "success",
-        data:{
-            data: null
-        }
-    });
-});
+export const deleteTour = factory.deleteOne(Tour);
 
 export const getTourStats = catchAsync(async (req, res) => {
     const stats = await Tour.aggregate([
