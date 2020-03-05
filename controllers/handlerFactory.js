@@ -1,6 +1,6 @@
 import catchAsync from "../utils/CatchAsync.js";
 import AppError from "../utils/AppError.js";
-import APIFeatures from "../utils/APIFeatures";
+import APIFeatures from "../utils/APIFeatures.js";
 
 export const createOne = Model => catchAsync(async (req, res) => {
     const  doc = await Model.create(req.body);
