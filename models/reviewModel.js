@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import Tour from "./tourModel.js";
+
 const reviewSchema = mongoose.Schema({
     review: {
         type: String,
@@ -39,6 +41,30 @@ reviewSchema.pre(/^find/, function (next) {
     });
 
     next();
+});
+
+reviewSchema.statics.calcAverageRatings = async function (tourId) {
+    const stats = await this.aggregate([
+        {
+            $match: { tour: tourId }
+        },
+        {
+            $group: {
+                _id: '$tour',
+                nRatings: { $sum: 1 },
+                avgRating: { $avg: '$rating' }
+            }
+        }
+    ]);
+
+    await Tour.findByIdAndUpdate(tourId, {
+        ratingsQuantity: stats[0].nRatings,
+        ratingsAverage: stats[0].avgRating
+    })
+};
+
+reviewSchema.pre('save', function() {
+    this.constructor.calcAverageRatings(this.tour);
 });
 
 const Review = mongoose.model('Review', reviewSchema);
