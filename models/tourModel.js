@@ -112,6 +112,8 @@ const tourSchema = new mongoose.Schema({
     toObject: { virtuals: true }
 });
 
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+
 tourSchema.virtual('durationWeeks').get(function () {
     return this.duration / 7;
 });
@@ -129,15 +131,6 @@ tourSchema.pre('save', function (next) {
 
     next();
 });
-
-// Embed users NOT GONNA BE USED
-/*tourSchema.pre('save', async function (next) {
-    const guidesPromisses = this.guides.map(async id => await User.findById(id));
-
-    this.guides = await Promise.all(guidesPromisses);
-
-    next();
-});*/
 
 // Query middleware
 tourSchema.pre(/^find/, function (next) {
