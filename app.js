@@ -6,6 +6,7 @@ import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
 import hpp from 'hpp';
 import path from 'path';
+import cors from 'cors';
 
 import AppError from "./utils/AppError.js";
 import globalErrorHandler from "./controllers/errorController.js";
@@ -16,6 +17,7 @@ import reviewRouter from './routes/reviewRoutes.js';
 
 const __dirname = path.resolve();
 const app = express();
+app.use(cors());
 
 // GLOBAL Middlewares
 // SET SECURITY HTTP HEADERS
