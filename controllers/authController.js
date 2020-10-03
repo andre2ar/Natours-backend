@@ -1,4 +1,4 @@
-import crypton from 'crypto';
+import crypto from 'crypto';
 import { promisify } from 'util';
 import jwt from 'jsonwebtoken';
 
